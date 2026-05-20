@@ -1,12 +1,12 @@
-//sets user variable for pug files
+//sets user variable for EJS files
 async function sessionAuth(req, res, next) {
   res.locals.user = req.session.user;
   res.locals.isAdmin = false;
   if (req.session.user) {
-    res.locals.isAdmin = Boolean(
-      req.session.user.roles.find((r) => r == "admin")
-    );
-  } else req.session.user = null;
+    res.locals.isAdmin = (req.session.user.role === "admin");
+  } else {
+    req.session.user = null;
+  }
   //set flash function to req;
   //use req.flash("info","message") in router to set a flash message
   req.flash = function (type, message) {

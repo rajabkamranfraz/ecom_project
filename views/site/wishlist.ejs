@@ -1,0 +1,47 @@
+<div class="container" style="margin-top: 100px; padding-bottom: 120px;">
+  <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom border-glass reveal">
+    <div>
+      <h1 class="m-0 text-white" style="font-size: 3rem; text-shadow: var(--glow-cyan);">WISH<span style="color: var(--accent-cyan);">LIST</span></h1>
+      <p class="text-muted m-0 mt-2 fs-5">Saved targets for future acquisition.</p>
+    </div>
+  </div>
+
+  <% if(wishlist && wishlist.length > 0) { %>
+    <div class="row g-4">
+      <% wishlist.forEach(function(product, index) { %>
+        <div class="col-md-4 col-sm-6 reveal" style="transition-delay: <%= index * 0.1 %>s;">
+          <div class="card-glass p-0 h-100 d-flex flex-column product-card" style="overflow: hidden; position: relative;">
+            
+            <a href="/wishlist/remove/<%= product._id %>" class="btn btn-sm btn-outline-modern" style="position: absolute; top: 15px; right: 15px; z-index: 10; border-color: var(--accent-pink); color: var(--accent-pink); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; padding: 0;">
+              <i class="fas fa-trash"></i>
+            </a>
+
+            <div class="p-4 bg-dark text-center position-relative" style="height: 250px;">
+              <img src="<%= product.image || 'https://dummyimage.com/300x300/111/00f0ff.png&text=' + encodeURIComponent(product.name) %>" class="img-fluid" style="max-height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(0,240,255,0.2));" alt="<%= product.name %>">
+            </div>
+            
+            <div class="p-4 d-flex flex-column flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="text-white fw-bold mb-0" style="font-size: 1.1rem; line-height: 1.4;"><%= product.name %></h5>
+              </div>
+              
+              <div class="mb-3">
+                <span class="fs-4 fw-bold" style="color: var(--accent-cyan);">$<%= parseFloat(product.price).toFixed(2) %></span>
+              </div>
+              
+              <a href="/product/<%= product.slug || product._id %>" class="btn btn-outline-modern w-100 mt-auto mb-2">VIEW DETAILS</a>
+              <a href="/add-cart/<%= product._id %>" class="btn btn-modern w-100">ADD TO CART</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="text-center p-5 card-glass reveal">
+      <i class="fas fa-bookmark text-muted mb-4" style="font-size: 4rem;"></i>
+      <h3 class="text-white mb-3">NO SAVED TARGETS</h3>
+      <p class="text-muted mb-4">Your wishlist is currently empty. Explore the grid and save items for later.</p>
+      <a href="/shop" class="btn btn-modern px-5">ACCESS STORE</a>
+    </div>
+  <% } %>
+</div>

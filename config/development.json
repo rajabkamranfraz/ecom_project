@@ -1,6 +1,7 @@
 {
   "jwtPrivateKey": "myPrivateKey",
-  "db": "mongodb://localhost:27017/fullstack",
+  "db": "mongodb+srv://rajabfraz10:rajabfraz10@cluster0.pl26z.mongodb.net/FullStack",
   "port": "4000",
-  "sessionSecret": "MySessionSecret"
+  "sessionSecret": "MySessionSecret",
+  "geminiApiKey": "AIzaSyCOJOpJ_HxcBTrEu0CxQ4inZiU6j5Y51mo"
 }

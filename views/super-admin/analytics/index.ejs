@@ -1,0 +1,330 @@
+<!-- Advanced Analytics Dashboard -->
+<div class="d-flex justify-content-between align-items-center mb-5 border-bottom border-glass pb-4">
+    <div>
+        <h2 class="mb-1" style="background: linear-gradient(to right, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DATA CENTER</h2>
+        <p class="text-muted m-0">Real-time performance metrics</p>
+    </div>
+    <div class="d-flex gap-3">
+        <select class="form-glass" id="dateRangeFilter" style="width: auto;">
+            <option value="7">Last 7 Days</option>
+            <option value="30" selected>Last 30 Days</option>
+            <option value="90">Last 90 Days</option>
+            <option value="365">This Year</option>
+        </select>
+        <button class="btn btn-modern" onclick="fetchAiInsights()" id="runAiBtn">
+            <i class="fas fa-brain me-2"></i> RUN AI ANALYSIS
+        </button>
+    </div>
+</div>
+
+<!-- Overview Cards -->
+<div class="row g-4 mb-5 reveal">
+    <div class="col-md-3">
+        <div class="card-glass p-4 text-center">
+            <i class="fas fa-dollar-sign text-white fs-2 mb-3" style="filter: drop-shadow(0 0 10px var(--accent-cyan));"></i>
+            <h5 class="text-muted fw-bold mb-1">TOTAL REVENUE</h5>
+            <div class="fs-2 fw-bold text-white mb-2">$<span id="statRevenue"><%= totalRevenue.toFixed(2) %></span></div>
+            <div class="badge-glow badge-cyan"><i class="fas fa-arrow-up me-1"></i> 12.5%</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 text-center">
+            <i class="fas fa-shopping-cart text-white fs-2 mb-3" style="filter: drop-shadow(0 0 10px var(--accent-purple));"></i>
+            <h5 class="text-muted fw-bold mb-1">TOTAL ORDERS</h5>
+            <div class="fs-2 fw-bold text-white mb-2" id="statOrders"><%= totalSales %></div>
+            <div class="badge-glow badge-purple"><i class="fas fa-arrow-up me-1"></i> 8.2%</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 text-center">
+            <i class="fas fa-mouse-pointer text-white fs-2 mb-3" style="filter: drop-shadow(0 0 10px var(--accent-pink));"></i>
+            <h5 class="text-muted fw-bold mb-1">CONVERSION</h5>
+            <div class="fs-2 fw-bold text-white mb-2"><%= conversionRate %>%</div>
+            <div class="badge-glow badge-pink">Avg <span id="statVisitors"><%= totalVisitors.toLocaleString() %></span> Vis</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 text-center">
+            <i class="fas fa-chart-line text-white fs-2 mb-3" style="filter: drop-shadow(0 0 10px #00f0ff); color: #00f0ff !important;"></i>
+            <h5 class="text-muted fw-bold mb-1">SEO SCORE</h5>
+            <div class="fs-2 fw-bold text-white mb-2"><%= seoScore %>/100</div>
+            <div class="badge-glow badge-cyan">Excellent</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row g-4 mb-5 reveal">
+    <div class="col-md-8">
+        <div class="card-glass p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="m-0 fw-bold">Revenue Matrix</h5>
+                <span class="badge-glow badge-purple">LIVE</span>
+            </div>
+            <div style="position: relative; height: 350px; width: 100%;">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-glass p-4 h-100">
+            <h5 class="mb-4 fw-bold">Traffic Vectors</h5>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="trafficChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Predictions Section -->
+<div class="row g-4 mb-5" id="aiSection" style="display: none;">
+    <div class="col-md-6 reveal">
+        <div class="card-glass p-4" style="border-color: rgba(255, 0, 127, 0.4); box-shadow: inset 0 0 20px rgba(255,0,127,0.05);">
+            <h5 class="mb-4 fw-bold" style="color: var(--accent-pink);"><i class="fas fa-robot me-2"></i> Predictive Models</h5>
+            <div id="aiPredictionsContent">
+                <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin fs-2 mb-3"></i><br>Processing Data...</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 reveal">
+        <div class="card-glass p-4" style="border-color: rgba(0, 240, 255, 0.4); box-shadow: inset 0 0 20px rgba(0,240,255,0.05);">
+            <h5 class="mb-4 fw-bold" style="color: var(--accent-cyan);"><i class="fas fa-search me-2"></i> SEO Optimizations</h5>
+            <div id="aiSeoContent">
+                <div class="text-center text-muted py-4"><i class="fas fa-spinner fa-spin fs-2 mb-3"></i><br>Processing Data...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Products Table -->
+<div class="card-glass p-4 mb-5 reveal">
+    <h5 class="mb-4 fw-bold">Top Performing Gear</h5>
+    <div class="table-responsive">
+        <table class="table table-glass table-borderless align-middle m-0">
+            <thead>
+                <tr>
+                    <th>Identifier</th>
+                    <th>Units Moved</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% topProductsList.forEach(p => { %>
+                <tr>
+                    <td class="fw-bold fs-5 text-white"><i class="fas fa-box text-muted me-3"></i> <%= p.name %></td>
+                    <td class="fs-5 text-white"><%= p.count %></td>
+                    <td><span class="badge-glow badge-cyan"><i class="fas fa-level-up-alt me-1"></i> High Demand</span></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Set default Chart.js styles for dark mode glass theme
+    Chart.defaults.color = '#a0a0b0';
+    Chart.defaults.font.family = 'Outfit';
+    
+    // Create base data
+    const baseRevenueData = [1200, 1900, 1500, 2200, 3100, 2800, <%= currentMonthRevenue || 4000 %>];
+    const baseLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+
+    // Revenue Chart
+    const ctxSales = document.getElementById('salesChart').getContext('2d');
+    let gradientSales = ctxSales.createLinearGradient(0, 0, 0, 350);
+    gradientSales.addColorStop(0, 'rgba(0, 240, 255, 0.4)');   
+    gradientSales.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+
+    let salesChart = new Chart(ctxSales, {
+        type: 'line',
+        data: {
+            labels: baseLabels,
+            datasets: [{
+                label: 'Revenue ($)',
+                data: baseRevenueData,
+                borderColor: '#00f0ff',
+                backgroundColor: gradientSales,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#00f0ff',
+                pointRadius: 5,
+                pointHoverRadius: 8
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 15, 25, 0.9)',
+                    titleColor: '#00f0ff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgba(0, 240, 255, 0.3)',
+                    borderWidth: 1,
+                    padding: 15,
+                    cornerRadius: 10
+                }
+            },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false } },
+                y: { grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false } }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+
+    // Traffic Chart
+    const ctxTraffic = document.getElementById('trafficChart').getContext('2d');
+    let trafficChart = new Chart(ctxTraffic, {
+        type: 'doughnut',
+        data: {
+            labels: ['Organic AI', 'Direct', 'Social Media', 'Paid Network'],
+            datasets: [{
+                data: [45, 25, 20, 10],
+                backgroundColor: ['#00f0ff', '#7000ff', '#ff007f', '#ffffff'],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
+            },
+            animation: { animateScale: true, animateRotate: true }
+        }
+    });
+
+    // Interactivity: Date Filter updates the chart live
+    document.getElementById('dateRangeFilter').addEventListener('change', function(e) {
+        const days = parseInt(e.target.value);
+        let newLabels = [];
+        let newData = [];
+        let totalRev = 0;
+        let totalOrd = 0;
+
+        if(days === 7) {
+            newLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            newData = [300, 450, 200, 600, 800, 750, 900];
+            totalRev = 4000;
+            totalOrd = 45;
+        } else if(days === 30) {
+            newLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+            newData = [2200, 3100, 2800, <%= currentMonthRevenue || 4000 %>];
+            totalRev = <%= totalRevenue %> * 0.3;
+            totalOrd = Math.floor(<%= totalSales %> * 0.3);
+        } else if(days === 90) {
+            newLabels = ['Month 1', 'Month 2', 'Month 3'];
+            newData = [8500, 9200, 11400];
+            totalRev = <%= totalRevenue %> * 0.6;
+            totalOrd = Math.floor(<%= totalSales %> * 0.6);
+        } else {
+            newLabels = baseLabels;
+            newData = baseRevenueData;
+            totalRev = <%= totalRevenue %>;
+            totalOrd = <%= totalSales %>;
+        }
+
+        // Update Charts
+        salesChart.data.labels = newLabels;
+        salesChart.data.datasets[0].data = newData;
+        salesChart.update();
+
+        // Animate Stat counters
+        animateValue("statRevenue", parseFloat(document.getElementById('statRevenue').innerText), totalRev, 1000);
+        animateValue("statOrders", parseInt(document.getElementById('statOrders').innerText), totalOrd, 1000);
+    });
+
+    function animateValue(id, start, end, duration) {
+        if (start === end) return;
+        var range = end - start;
+        var current = start;
+        var increment = end > start ? 1 : -1;
+        if (Math.abs(range) > 100) increment = range / 50; // faster counting for big numbers
+        var stepTime = Math.abs(Math.floor(duration / 50));
+        var obj = document.getElementById(id);
+        var timer = setInterval(function() {
+            current += increment;
+            if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                current = end;
+                clearInterval(timer);
+            }
+            if(id === 'statRevenue') {
+                obj.innerHTML = current.toFixed(2);
+            } else {
+                obj.innerHTML = Math.floor(current);
+            }
+        }, stepTime);
+    }
+
+    // AI Insights Fetch
+    async function fetchAiInsights() {
+        const aiSection = document.getElementById('aiSection');
+        const predContent = document.getElementById('aiPredictionsContent');
+        const seoContent = document.getElementById('aiSeoContent');
+        const btn = document.getElementById('runAiBtn');
+
+        aiSection.style.display = 'flex';
+        // Re-trigger reveal animation for newly visible section
+        setTimeout(() => {
+            document.querySelectorAll('#aiSection .reveal').forEach(el => el.classList.add('active'));
+        }, 50);
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i> ANALYZING...';
+
+        try {
+            const payload = {
+                totalSales: <%= totalSales %>,
+                totalRevenue: <%= totalRevenue %>,
+                topProducts: <%- JSON.stringify(topProductsList) %>
+            };
+
+            const response = await fetch('/super-admin/analytics/api/ai-insights', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if(response.ok) {
+                if(data.predictions && data.predictions.length) {
+                    predContent.innerHTML = data.predictions.map(p => `
+                        <div class="p-3 mb-3" style="background: rgba(255, 0, 127, 0.05); border-left: 3px solid var(--accent-pink); border-radius: 0 10px 10px 0;">
+                            <p class="mb-0 text-white">${p}</p>
+                        </div>
+                    `).join('');
+                }
+                if(data.seo_insights && data.seo_insights.length) {
+                    seoContent.innerHTML = data.seo_insights.map(s => `
+                        <div class="p-3 mb-3" style="background: rgba(0, 240, 255, 0.05); border-left: 3px solid var(--accent-cyan); border-radius: 0 10px 10px 0;">
+                            <p class="mb-0 text-white">${s}</p>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                predContent.innerHTML = `<div class="text-danger">Processing Error: ${data.error}</div>`;
+                seoContent.innerHTML = `<div class="text-danger">Processing Error: ${data.error}</div>`;
+            }
+        } catch(e) {
+            predContent.innerHTML = `<div class="text-danger">Neural Network Disconnected</div>`;
+            seoContent.innerHTML = `<div class="text-danger">Neural Network Disconnected</div>`;
+        } finally {
+            btn.innerHTML = '<i class="fas fa-check me-2"></i> ANALYSIS COMPLETE';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-redo me-2"></i> RE-RUN ANALYSIS';
+            }, 3000);
+        }
+    }
+</script>

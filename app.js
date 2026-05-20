@@ -9,7 +9,6 @@ var protectedRouter = require("./routes/protected");
 var sessionAuth = require("./middlewares/sessionAuth");
 var superAdminMiddleware = require("./middlewares/super-admin");
 var checkSessionAuth = require("./middlewares/checkSessionAuth");
-var apiauth = require("./middlewares/apiauth");
 var session = require("express-session");
 var app = express();
 
@@ -22,7 +21,7 @@ var config = require("config");
 app.use(
   session({
     secret: config.get("sessionSecret"),
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 86400000 },
     resave: true,
     saveUninitialized: true,
   })
@@ -37,30 +36,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(sessionAuth);
+
 app.use(
   "/super-admin",
   superAdminMiddleware,
-  require("./routes/super-admin/dashbosrd")
+  require("./routes/super-admin/dashboard")
 );
 app.use(
-  "/super-admin",
+  "/super-admin/products",
   superAdminMiddleware,
   require("./routes/super-admin/products")
 );
-app.use("/api/public/products", require("./routes/api/public/products"));
-app.use("/api/categories", require("./routes/api/catagories"));
-app.use("/api/products", apiauth, require("./routes/api/products"));
-app.use("/api/auth", require("./routes/api/auth"));
-app.use("/", sessionAuth, indexRouter);
-app.use("/my-account", sessionAuth, checkSessionAuth, protectedRouter);
-app.use("/", sessionAuth, require("./routes/shop"));
-app.get("/admin", async (req, res) => {
-  res.sendFile(path.join(__dirname, "admin", "build", "index.html"));
-});
-app.get("/admin/*", async (req, res) => {
-  res.sendFile(path.join(__dirname, "admin", "build", "index.html"));
-});
-app.use(express.static(path.join(__dirname, "admin", "build")));
+app.use(
+  "/super-admin/orders",
+  superAdminMiddleware,
+  require("./routes/super-admin/orders")
+);
+app.use(
+  "/super-admin/analytics",
+  superAdminMiddleware,
+  require("./routes/super-admin/analytics")
+);
+
+app.use("/", indexRouter);
+app.use("/my-account", checkSessionAuth, protectedRouter);
+app.use("/", require("./routes/shop"));
+app.use("/api/chatbot", require("./routes/chatbot"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

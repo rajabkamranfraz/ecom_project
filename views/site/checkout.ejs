@@ -1,0 +1,80 @@
+<div class="container" style="margin-top: 100px; padding-bottom: 100px;">
+  <div class="row justify-content-center">
+    <div class="col-md-7 reveal">
+      <div class="card-glass p-5 position-relative">
+        <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%); filter: blur(20px); pointer-events: none;"></div>
+
+        <% if (typeof discount !== 'undefined' && discount > 0) { %>
+          <div class="mb-4 p-3 text-center" style="background: rgba(0, 240, 255, 0.1); border: 1px solid var(--accent-cyan); border-radius: 10px; color: var(--accent-cyan);">
+            <i class="fas fa-tags me-2"></i> COUPON APPLIED (<%= code %>) - $<%= discount.toFixed(2) %> OFF
+          </div>
+        <% } %>
+
+        <h2 class="mb-4 text-white border-bottom border-glass pb-3"><i class="fas fa-shield-alt me-2 text-muted"></i> SECURE PROTOCOL</h2>
+        <form action="/checkout/process" method="POST">
+          <div class="mb-4">
+            <label class="form-label text-muted text-uppercase mb-2" style="font-size: 0.8rem; letter-spacing: 2px;">Operator Name</label>
+            <input type="text" class="form-control form-glass fs-5" placeholder="J. DOE" value="<%= typeof user !== 'undefined' && user ? user.name : '' %>" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label text-muted text-uppercase mb-2" style="font-size: 0.8rem; letter-spacing: 2px;">Drop Coordinates</label>
+            <input type="text" class="form-control form-glass fs-5" placeholder="SECTOR 7, UNIT 4" required>
+          </div>
+          <div class="row">
+            <div class="col-6 mb-4">
+              <label class="form-label text-muted text-uppercase mb-2" style="font-size: 0.8rem; letter-spacing: 2px;">Zone</label>
+              <input type="text" class="form-control form-glass fs-5" required>
+            </div>
+            <div class="col-6 mb-4">
+              <label class="form-label text-muted text-uppercase mb-2" style="font-size: 0.8rem; letter-spacing: 2px;">Routing Code</label>
+              <input type="text" class="form-control form-glass fs-5" required>
+            </div>
+          </div>
+
+          <h4 class="mt-5 mb-4 text-white border-bottom border-glass pb-3"><i class="fas fa-credit-card me-2 text-muted"></i> CREDIT TRANSFER</h4>
+
+          <div class="d-flex gap-4 mb-4">
+            <label class="card-glass flex-fill text-center p-4 payment-option active" style="cursor:pointer;">
+              <input type="radio" name="payment_method" value="Card" checked class="d-none">
+              <h5 class="m-0 text-white"><i class="fab fa-cc-visa me-2" style="color: var(--accent-cyan);"></i> CARD</h5>
+            </label>
+            <label class="card-glass flex-fill text-center p-4 payment-option" style="cursor:pointer; opacity: 0.6;">
+              <input type="radio" name="payment_method" value="PayPal" class="d-none">
+              <h5 class="m-0 text-muted"><i class="fab fa-paypal me-2"></i> PAYPAL</h5>
+            </label>
+          </div>
+
+          <div class="p-3 mb-5 text-center" style="background: rgba(255, 0, 127, 0.1); border: 1px solid var(--accent-pink); border-radius: 10px; color: var(--accent-pink);">
+            <i class="fas fa-exclamation-triangle me-2"></i> SIMULATION ACTIVE: NO REAL CREDITS WILL BE DEDUCTED.
+          </div>
+
+          <button type="submit" class="btn btn-modern w-100 fs-4 py-3 d-flex justify-content-between align-items-center">
+            <span>EXECUTE TRANSFER</span>
+            <span class="fw-bold" style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">$<%= (total - (typeof discount !== 'undefined' ? discount : 0)).toFixed(2) %></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.payment-option').forEach(el => {
+        el.classList.remove('active');
+        el.style.opacity = '0.6';
+        el.style.borderColor = 'var(--border-glass)';
+        el.querySelector('h5').classList.remove('text-white');
+        el.querySelector('h5').classList.add('text-muted');
+        el.querySelector('i').style.color = '';
+      });
+      this.parentElement.classList.add('active');
+      this.parentElement.style.opacity = '1';
+      this.parentElement.style.borderColor = 'var(--accent-cyan)';
+      this.parentElement.querySelector('h5').classList.add('text-white');
+      this.parentElement.querySelector('h5').classList.remove('text-muted');
+      this.parentElement.querySelector('i').style.color = 'var(--accent-cyan)';
+    });
+  });
+</script>

@@ -1,53 +1,47 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Awesome Shop</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+<nav class="navbar navbar-expand-lg navbar-dark pb-3 pt-3">
+  <div class="container">
+    <a class="navbar-brand" href="/">FIGHT<span class="text-white">FIT</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-toggle="target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a href="/contact-us" class="nav-link">Contact Us</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a href="/cart" class="nav-link">Shopping Cart</a>
+          <a class="nav-link" href="/shop">Shop Equipments</a>
         </li>
         <li class="nav-item">
-          <a href="/my-account" class="nav-link">My Account</a>
+          <a class="nav-link" href="/memberships">Memberships</a>
         </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a href="/super-admin" class="nav-link">Super Admin</a>
+          <a class="nav-link" href="/cart">
+            <i class="fas fa-shopping-cart"></i> Cart
+          </a>
         </li>
-        <% if(isAdmin) {%>
-        <li class="nav-item">
-          <a href="/admin" class="nav-link">Admin Panel</a>
-        </li>
-        <% } %> <% if(!user) {%>
-        <li class="nav-item">
-          <a href="/register" class="nav-link">Register</a>
-        </li>
-        <li class="nav-item">
-          <a href="/login" class="nav-link">Login</a>
-        </li>
-        <% }else { %>
-        <li class="nav-item">
-          <a href="/logout" class="nav-link">Logout</a>
-        </li>
-
+        <% if (!user) { %>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-primary ms-2 px-4" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-primary ms-2 px-4 text-white" href="/register">Join Now</a>
+          </li>
+        <% } else { %>
+          <% if(isAdmin) { %>
+            <li class="nav-item">
+              <a class="nav-link text-warning" href="/super-admin">Admin Panel</a>
+            </li>
+          <% } %>
+          <li class="nav-item">
+            <a class="nav-link text-success" href="/my-account">My Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="/logout">Logout</a>
+          </li>
         <% } %>
-
       </ul>
     </div>
   </div>

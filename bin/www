@@ -88,6 +88,6 @@ function onListening() {
 const mongoose = require("mongoose");
 const connectionString = config.get("db");
 mongoose
-  .connect(connectionString, { useUnifiedTopology: true, useNewUrlParser: true})
+  .connect(connectionString)
   .then(() => console.log("Connected to " + connectionString))
   .catch((error) => console.log(error.message));

@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark navbar-glass fixed-top">
+  <div class="container-fluid px-5">
+    <a class="navbar-brand" href="/">FIGHTFIT</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link nav-link-modern" href="/">HOME</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-modern" href="/shop">SHOP</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-modern" href="/trainers">TRAINERS</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-modern" href="/memberships">MEMBERSHIPS</a></li>
+        <% if (typeof user !== 'undefined' && user && user.membership) { %>
+          <li class="nav-item"><a class="nav-link nav-link-modern" href="/premium-gear" style="color: var(--accent-cyan); text-shadow: 0 0 5px var(--accent-cyan);"><i class="fas fa-crown"></i> PREMIUM GEAR</a></li>
+        <% } %>
+      </ul>
+      <div class="d-flex align-items-center gap-3">
+        <% if (typeof user !== 'undefined' && user) { %>
+          <% if (user.role !== 'admin') { %>
+            <a href="/wishlist" class="nav-link-modern" title="Wishlist"><i class="fas fa-bookmark fs-5"></i></a>
+            <a href="/cart" class="nav-link-modern" title="Cart"><i class="fas fa-shopping-cart fs-5"></i></a>
+          <% } %>
+          <% if (user.role === 'admin') { %>
+            <a href="/super-admin" class="btn btn-outline-modern btn-sm">ADMIN</a>
+          <% } %>
+        <% } else { %>
+          <a href="/login" class="nav-link-modern">LOGIN</a>
+          <a href="/register" class="btn btn-modern btn-sm">REGISTER</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

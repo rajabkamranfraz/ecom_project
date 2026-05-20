@@ -1,0 +1,40 @@
+<div class="container" style="margin-top: 100px; padding-bottom: 120px;">
+  <div class="row justify-content-center">
+    <div class="col-md-6 reveal">
+      <div class="card-glass p-5 text-center position-relative overflow-hidden">
+        <div style="position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%); filter: blur(30px); pointer-events: none; opacity: 0.5;"></div>
+        
+        <img src="/images/uploaded/<%= trainer.toLowerCase() %>.png" alt="<%= trainer %>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-bottom: 20px; border: 3px solid var(--accent-cyan); filter: grayscale(100%) contrast(1.2);">
+        
+        <h2 class="text-white mb-2" style="font-size: 2.5rem; text-transform: uppercase;">SCHEDULE <span style="color: var(--accent-cyan);"><%= trainer %></span></h2>
+        <p class="text-muted mb-5">Secure your time slot for physical protocol training.</p>
+        
+        <form action="/schedule-trainer/<%= trainer %>" method="POST">
+          <div class="mb-4 text-start">
+            <label class="form-label text-white" style="letter-spacing: 1px; font-weight: bold;"><i class="far fa-calendar-alt me-2 text-muted"></i> DATE</label>
+            <input type="date" name="date" class="form-control form-glass fs-5" required min="<%= new Date().toISOString().split('T')[0] %>">
+          </div>
+          
+          <div class="mb-5 text-start">
+            <label class="form-label text-white" style="letter-spacing: 1px; font-weight: bold;"><i class="far fa-clock me-2 text-muted"></i> TIME SLOT</label>
+            <select name="time" class="form-control form-glass fs-5" required>
+              <option value="" disabled selected>Select Available Slot</option>
+              <option value="08:00 AM">08:00 AM - 09:00 AM</option>
+              <option value="10:00 AM">10:00 AM - 11:00 AM</option>
+              <option value="13:00 PM">01:00 PM - 02:00 PM</option>
+              <option value="16:00 PM">04:00 PM - 05:00 PM</option>
+              <option value="18:30 PM">06:30 PM - 07:30 PM</option>
+            </select>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded" style="background: rgba(0,240,255,0.05); border: 1px solid var(--accent-cyan);">
+            <span class="text-white fw-bold">SESSION FEE</span>
+            <span class="fs-4 fw-bold" style="color: var(--accent-cyan);">$60.00</span>
+          </div>
+
+          <button type="submit" class="btn btn-modern w-100 fs-5 py-3"><i class="fas fa-lock me-2"></i> CONFIRM & ADD TO QUEUE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

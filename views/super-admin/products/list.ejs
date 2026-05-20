@@ -1,44 +1,154 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>All Products</h2>
-    <a href="/super-admin/products/create" class="btn btn-primary">
-      <i class="bi bi-plus-lg"></i> Create New Product
-    </a>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head') %>
 
-  <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-      <tr>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Department</th>
-        <th>Color</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% products.forEach(product => { %>
-        <tr>
-          <td>
-            <% if (product.image) { %>
-              <img src="/images/uploaded/<%= product.image %>" alt="<%= product.name %>" width="60">
-            <% } else { %>
-              N/A
-            <% } %>
-          </td>
-          <td><%= product.name %></td>
-          <td><%= product.department %></td>
-          <td><%= product.color %></td>
-          <td>$<%= product.price %></td>
-          <td><%= product.description %></td>
-          <td>
-            <a href="/super-admin/products/edit/<%= product._id %>" class="btn btn-sm btn-warning">Edit</a>
-            <a href="/super-admin/products/delete/<%= product._id %>" class="btn btn-sm btn-danger">Delete</a>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</div>
+    <style>
+        .admin-section .welcome-content {
+            display: block;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #252d38;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #404b57;
+            color: #cacaca;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .products-table th {
+            background-color: #293440;
+            color: #DDD0B2;
+            font-weight: 600;
+        }
+
+        .products-table tr:hover {
+            background-color: #2f3844;
+        }
+
+        .products-table img {
+            border-radius: 6px;
+            border: 2px solid #ac3a3f;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-btn {
+            padding: 8px 14px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .admin-btn.create {
+            background-color: #ac3a3f;
+        }
+
+        .admin-btn.edit {
+            background-color: #f0ad4e;
+            color: #222;
+        }
+
+        .admin-btn.delete {
+            background-color: #dc3545;
+        }
+
+        .admin-btn:hover {
+            opacity: 0.9;
+        }
+
+        .admin-section {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<%- include('../../partials/header') %>
+
+    <!-- MAIN -->
+    <main>
+        <section class="welcome admin-section">
+            <div class="container">
+
+                <div class="welcome-header">
+                    <h2>Manage Products</h2>
+                </div>
+
+                <div class="welcome-content">
+
+                    <div class="admin-header">
+                        <h3 style="color:#DDD0B2;">All Products</h3>
+                        <a href="/super-admin/products/create" class="admin-btn create">
+                            <i class="fa fa-plus"></i> Create Product
+                        </a>
+                    </div>
+
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Color</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(product => { %>
+                                <tr>
+                                    <td>
+                                        <% if (product.image) { %>
+                                            <img src="/images/uploaded/<%= product.image %>" alt="<%= product.name %>" width="60">
+                                        <% } else { %>
+                                            —
+                                        <% } %>
+                                    </td>
+                                    <td><%= product.name %></td>
+                                    <td><%= product.department %></td>
+                                    <td><%= product.color %></td>
+                                    <td>$<%= product.price %></td>
+                                    <td><%= product.description %></td>
+                                    <td>
+                                        <a href="/super-admin/products/edit/<%= product._id %>" class="admin-btn edit">
+                                            Edit
+                                        </a>
+                                        <a href="/super-admin/products/delete/<%= product._id %>"
+                                           class="admin-btn delete"
+                                           onclick="return confirm('Are you sure?')">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+<%- include('../../partials/footer') %>
+
+</html>

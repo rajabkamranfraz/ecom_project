@@ -1,1 +1,44 @@
-<h3>Super Admin Dashboard</h3>
+<div class="row g-4 mb-5 reveal">
+    <div class="col-md-3">
+        <div class="card-glass p-4 h-100 position-relative overflow-hidden">
+            <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(255,255,255,0.02); pointer-events: none;"><i class="fas fa-users"></i></div>
+            <div class="text-muted fw-bold mb-3 text-uppercase" style="letter-spacing: 1px;">Operatives</div>
+            <div class="fs-1 fw-bold text-white"><%= stats.totalUsers %></div>
+            <div class="mt-2 text-success"><i class="fas fa-level-up-alt me-1"></i> Active Grid</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 h-100 position-relative overflow-hidden" style="border-color: rgba(0,240,255,0.3);">
+            <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(0,240,255,0.05); pointer-events: none;"><i class="fas fa-boxes"></i></div>
+            <div class="fw-bold mb-3 text-uppercase" style="letter-spacing: 1px; color: var(--accent-cyan);">Arsenal Count</div>
+            <div class="fs-1 fw-bold text-white"><%= stats.totalProducts %></div>
+            <div class="mt-2" style="color: var(--accent-cyan);"><i class="fas fa-check-circle me-1"></i> Systems Nominal</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 h-100 position-relative overflow-hidden" style="border-color: rgba(255,0,127,0.3);">
+            <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(255,0,127,0.05); pointer-events: none;"><i class="fas fa-exchange-alt"></i></div>
+            <div class="fw-bold mb-3 text-uppercase" style="letter-spacing: 1px; color: var(--accent-pink);">Active Transfers</div>
+            <div class="fs-1 fw-bold text-white"><%= stats.activeOrders %></div>
+            <div class="mt-2" style="color: var(--accent-pink);"><i class="fas fa-spinner fa-spin me-1"></i> Processing</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-glass p-4 h-100 position-relative overflow-hidden" style="border-color: rgba(112,0,255,0.3);">
+            <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; color: rgba(112,0,255,0.05); pointer-events: none;"><i class="fas fa-chart-line"></i></div>
+            <div class="fw-bold mb-3 text-uppercase" style="letter-spacing: 1px; color: var(--accent-purple);">Net Revenue</div>
+            <div class="fs-1 fw-bold text-white">$<%= stats.totalRevenue.toFixed(2) %></div>
+            <div class="mt-2 text-success"><i class="fas fa-level-up-alt me-1"></i> +4.2% Cycle</div>
+        </div>
+    </div>
+</div>
+
+<div class="card-glass p-5 reveal border-0" style="background: rgba(0,0,0,0.4); border-top: 1px solid var(--border-glass) !important;">
+    <h3 class="mb-4 text-white">SYSTEM COMMANDS</h3>
+    <p class="fs-6 text-muted mb-5">Execute global directives or navigate to advanced data centers.</p>
+    <div class="d-flex gap-4">
+        <a href="/super-admin/products/add" class="btn btn-modern fs-5 py-3 flex-fill text-center d-flex align-items-center justify-content-center"><i class="fas fa-plus-circle me-2"></i> DEPLOY GEAR</a>
+        <a href="/super-admin/orders" class="btn btn-outline-modern fs-5 py-3 flex-fill text-center d-flex align-items-center justify-content-center"><i class="fas fa-list-alt me-2"></i> VIEW TRANSFERS</a>
+        <a href="/super-admin/analytics" class="btn btn-outline-modern fs-5 py-3 flex-fill text-center d-flex align-items-center justify-content-center" style="border-color: var(--accent-purple); color: var(--accent-purple);"><i class="fas fa-project-diagram me-2"></i> DATA CENTER</a>
+    </div>
+</div>

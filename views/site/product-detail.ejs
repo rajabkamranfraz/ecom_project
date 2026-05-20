@@ -1,0 +1,107 @@
+<div class="container" style="margin-top: 100px; margin-bottom: 100px;">
+  <div class="d-flex gap-2 mb-5 reveal" style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+    <a href="/" class="text-muted text-decoration-none hover-white">Home</a> 
+    <span style="color: var(--accent-cyan);">/</span>
+    <a href="/shop" class="text-muted text-decoration-none hover-white">Matrix</a> 
+    <span style="color: var(--accent-cyan);">/</span>
+    <span class="text-white"><%= product.name %></span>
+  </div>
+
+  <div class="row g-5">
+    <div class="col-md-6 reveal">
+      <div class="card-glass d-flex align-items-center justify-content-center p-5 position-relative" style="min-height: 500px;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,240,255,0.15) 0%, transparent 70%); pointer-events: none;"></div>
+        <img src="<%= product.image ? product.image : 'https://dummyimage.com/600x600/111/00f0ff.png&text='+product.name %>" class="img-fluid position-relative z-index-1" style="max-height: 400px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); transition: transform 0.5s;">
+      </div>
+    </div>
+
+    <div class="col-md-6 reveal" style="transition-delay: 0.2s;">
+      <h1 class="text-white" style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 15px;"><%= product.name %></h1>
+
+      <% if(product.seoTags) { %>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <% product.seoTags.split(',').slice(0,4).forEach(tag => { %>
+            <span class="badge-glow" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);"><%= tag.trim() %></span>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <div class="mb-4">
+        <span style="font-size: 3rem; font-weight: 800; color: var(--accent-cyan); text-shadow: var(--glow-cyan);">$<%= parseFloat(product.price).toFixed(2) %></span>
+      </div>
+
+      <div class="mb-5 p-4 card-glass" style="background: rgba(0,0,0,0.3);">
+        <h6 class="text-muted text-uppercase letter-spacing-2 mb-3">Specifications</h6>
+        <div id="product-description" class="fs-6 text-white m-0" style="line-height: 1.8;" data-raw="<%= encodeURIComponent(product.description || 'Advanced combat technology engineered for peak performance in hostile environments.') %>">
+        </div>
+      </div>
+
+      <div class="mb-5 d-flex align-items-center gap-4">
+        <% if(product.stock > 0) { %>
+          <span class="badge-glow badge-purple"><i class="fas fa-check-circle me-1"></i> IN STOCK (<%= product.stock %>)</span>
+        <% } else { %>
+          <span class="badge-glow badge-pink"><i class="fas fa-times-circle me-1"></i> DEPLETED</span>
+        <% } %>
+        
+        <% if(product.department) { %>
+          <span class="text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;"><i class="fas fa-microchip me-2" style="color: var(--accent-cyan);"></i><%= product.department %></span>
+        <% } %>
+      </div>
+
+      <% if (typeof user === 'undefined' || !user || user.role !== 'admin') { %>
+        <% if (product.stock > 0) { %>
+          <div class="d-flex gap-3">
+            <a href="/add-cart/<%= product._id %>" class="btn btn-modern btn-lg flex-grow-1 py-3 fs-5"><i class="fas fa-download me-2"></i> INITIATE TRANSFER</a>
+            <a href="/wishlist/add/<%= product._id %>" class="btn btn-outline-modern btn-lg py-3 px-4" title="Add to Wishlist"><i class="fas fa-bookmark"></i></a>
+          </div>
+        <% } else { %>
+          <div class="d-flex gap-3">
+            <button class="btn btn-outline-modern btn-lg flex-grow-1 py-3 fs-5" style="opacity: 0.5; cursor: not-allowed;" disabled>UNAVAILABLE</button>
+            <a href="/wishlist/add/<%= product._id %>" class="btn btn-outline-modern btn-lg py-3 px-4" title="Add to Wishlist"><i class="fas fa-bookmark"></i></a>
+          </div>
+        <% } %>
+      <% } else { %>
+        <div class="p-3 text-center" style="background: rgba(255,0,127,0.1); border: 1px solid var(--accent-pink); border-radius: 10px; color: var(--accent-pink);">
+          <i class="fas fa-lock me-2"></i> ADMIN OVERRIDE ACTIVE. PURCHASING DISABLED.
+        </div>
+      <% } %>
+
+      <% if (product.metaDetails) { %>
+      <div class="mt-5 p-4 card-glass">
+        <h6 class="text-muted text-uppercase letter-spacing-2 mb-3">Meta Data</h6>
+        <p class="m-0 text-white" style="font-family: monospace; font-size: 0.9rem;"><%= product.metaDetails %></p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<style>
+.hover-white:hover { color: #fff !important; }
+.card-glass:hover img { transform: translateY(-10px); }
+
+/* Markdown Styles for Description */
+#product-description h1, #product-description h2, #product-description h3 {
+  color: var(--accent-cyan);
+  font-weight: 800;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+#product-description p { margin-bottom: 1.2rem; color: #ddd; }
+#product-description strong { color: #fff; font-weight: 800; }
+#product-description ul { margin-bottom: 1.2rem; padding-left: 1.2rem; }
+#product-description li { margin-bottom: 0.5rem; color: #ddd; }
+</style>
+
+<!-- Marked JS for parsing AI Markdown descriptions -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("product-description");
+    if(container) {
+      const rawText = decodeURIComponent(container.getAttribute("data-raw"));
+      container.innerHTML = marked.parse(rawText);
+    }
+  });
+</script>

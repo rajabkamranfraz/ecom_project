@@ -1,24 +1,98 @@
-<a href="/" class="btn btn-info">Continue Shopping</a>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Product Price</th>
-        </tr>
+<div class="container" style="margin-top: 100px; padding-bottom: 100px;">
+  <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom border-glass reveal">
+    <h1 class="m-0" style="color: #fff;">ACQUISITION <span style="color: var(--accent-cyan);">QUEUE</span></h1>
+    <span class="badge-glow badge-purple"><%= cartItems ? cartItems.length : 0 %> ASSETS</span>
+  </div>
 
-    </thead>
-    <tbody>
-        <% for(var i=0;i<products.length;i++) {let product = products[i];%>
-            <tr>
-                <td><%=product.name  %> </td>
-                <td><%=product.price  %> </td>
-            </tr>
-            <% } %> 
-            <tfoot>
+  <div class="row g-5">
+    <div class="col-lg-8 reveal" style="transition-delay: 0.1s;">
+      <% if(cartItems && cartItems.length > 0) { %>
+        <div class="card-glass p-0">
+          <div class="table-responsive">
+            <table class="table table-glass align-middle mb-0">
+              <thead>
                 <tr>
-                    <td>Total:</td>
-                    <td><%=total  %> </td>
+                  <th class="p-4">ASSET</th>
+                  <th>VALUE</th>
+                  <th>QTY</th>
+                  <th>SUBTOTAL</th>
+                  <th>DISCARD</th>
                 </tr>
-            </tfoot>
-    </tbody>
-</table>
+              </thead>
+              <tbody>
+                <% cartItems.forEach(item => { %>
+                  <tr>
+                    <td class="p-4">
+                      <div class="d-flex align-items-center gap-4">
+                        <div style="width: 80px; height: 80px; background: rgba(0,0,0,0.5); border-radius: 12px; padding: 10px; border: 1px solid var(--border-glass);">
+                          <img src="<%= item.product_id.image || 'https://dummyimage.com/60x60/111/00f0ff' %>" style="width:100%;height:100%;object-fit:contain; filter: drop-shadow(0 0 5px rgba(0,240,255,0.5));">
+                        </div>
+                        <span class="fs-5 fw-bold text-white"><%= item.product_id.name %></span>
+                      </div>
+                    </td>
+                    <td class="fs-5 text-muted">$<%= parseFloat(item.product_id.price).toFixed(2) %></td>
+                    <td>
+                      <span class="fs-5 fw-bold text-white py-2 px-3" style="background: rgba(255,255,255,0.05); border-radius: 8px;"><%= item.quantity %></span>
+                    </td>
+                    <td class="fs-5 fw-bold" style="color: var(--accent-cyan);">
+                      <% if(typeof discountRate !== 'undefined' && discountRate > 0) { %>
+                        <div style="text-decoration: line-through; color: #666; font-size: 0.8rem;">$<%= (item.product_id.price * item.quantity).toFixed(2) %></div>
+                        $<%= ((item.product_id.price * item.quantity) * (1 - discountRate)).toFixed(2) %>
+                      <% } else { %>
+                        $<%= (item.product_id.price * item.quantity).toFixed(2) %>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/remove-cart/<%= item._id %>" class="btn btn-outline-modern" style="border-color: var(--accent-pink); color: var(--accent-pink); padding: 8px 15px;">
+                        <i class="fas fa-trash-alt"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="card-glass text-center p-5">
+          <h1 class="mb-4" style="font-size: 6rem; color: rgba(255,255,255,0.05);"><i class="fas fa-ghost"></i></h1>
+          <h3 class="text-white mb-4">QUEUE IS EMPTY.</h3>
+          <a href="/shop" class="btn btn-modern fs-5 py-3 px-5">BROWSE MATRIX</a>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="col-lg-4 reveal" style="transition-delay: 0.2s;">
+      <div class="card-glass p-4 sticky-top" style="top: 100px;">
+        <h4 class="mb-4 text-white border-bottom border-glass pb-3">TRANSACTION SUMMARY</h4>
+        <div class="d-flex justify-content-between mb-3 fs-5 text-muted">
+          <span>Subtotal</span>
+          <span class="text-white">$<%= total.toFixed(2) %></span>
+        </div>
+        <div class="d-flex justify-content-between mb-4 fs-5 text-muted">
+          <span>Network Routing</span>
+          <span class="badge-glow badge-cyan">OPTIMIZED (FREE)</span>
+        </div>
+
+        <div class="mb-4 pt-3 border-top border-glass">
+          <form action="/apply-coupon" method="POST" class="d-flex gap-2 mb-2">
+            <input type="text" name="code" class="form-control" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-glass);" placeholder="COUPON (e.g. CYBER20)" value="<%= typeof code !== 'undefined' ? code : '' %>">
+            <button type="submit" class="btn btn-outline-modern" style="border-color: var(--accent-cyan); color: var(--accent-cyan); padding: 8px 15px;"><i class="fas fa-key"></i></button>
+          </form>
+          <div style="font-size: 0.8rem; color: #aaa;">
+            <strong>Available Protocols:</strong> <span style="color: var(--accent-cyan); font-family: monospace; cursor: pointer;" onclick="document.querySelector('input[name=code]').value='CYBER20'">CYBER20</span> (20% OFF)
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mb-5 pt-4 border-top border-glass">
+          <span class="fs-4 fw-bold text-white">TOTAL</span>
+          <span class="fs-3 fw-bold" style="color: var(--accent-purple); text-shadow: var(--glow-purple);">
+            $<%= (total * (1 - (typeof discountRate !== 'undefined' ? discountRate : 0))).toFixed(2) %>
+          </span>
+        </div>
+        <% if(total > 0) { %>
+          <a href="/checkout" class="btn btn-modern w-100 fs-5 py-3"><i class="fas fa-fingerprint me-2"></i> AUTHORIZE CHECKOUT</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

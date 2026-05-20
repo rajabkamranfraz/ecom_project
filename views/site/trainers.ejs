@@ -1,0 +1,190 @@
+<div class="container" style="margin-top: 100px; padding-bottom: 120px;">
+  <div class="text-center mb-5 pb-5 border-bottom border-glass reveal">
+    <h1 style="font-size: 4.5rem; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2);">ELITE <span
+        style="color: var(--accent-cyan);">TRAINERS</span></h1>
+    <p class="fs-5 text-muted fw-bold" style="letter-spacing: 1px;">Biological combat algorithms ready for deployment.
+    </p>
+  </div>
+
+  <div class="row g-5">
+    <!-- Trainer 1 -->
+    <div class="col-md-4 reveal" style="transition-delay: 0.1s;">
+      <div class="trainer-card">
+        <div class="trainer-img-wrapper">
+          <img src="/images/uploaded/chen.png" class="trainer-img" alt="Chen">
+          <div class="trainer-overlay"></div>
+          <div class="trainer-badge" style="background: var(--accent-cyan); color: #000;">KRAV MAGA</div>
+        </div>
+        <div class="trainer-info">
+          <h3 class="trainer-name">CHEN</h3>
+          <p class="trainer-desc">10+ years optimizing human defense responses against hostile entities.</p>
+          <a href="/book-trainer/Chen" class="btn-trainer w-100"
+            style="border-color: var(--accent-cyan); color: var(--accent-cyan);">SCHEDULE SESSION <i
+              class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trainer 2 -->
+    <div class="col-md-4 reveal" style="transition-delay: 0.2s;">
+      <div class="trainer-card">
+        <div class="trainer-img-wrapper">
+          <img src="/images/uploaded/khabib.png" class="trainer-img" alt="Khabib">
+          <div class="trainer-overlay"></div>
+          <div class="trainer-badge" style="background: #fff; color: #000;">GRAPPLING</div>
+        </div>
+        <div class="trainer-info">
+          <h3 class="trainer-name">KHABIB</h3>
+          <p class="trainer-desc">Master-level subroutines in ground control and joint manipulation.</p>
+          <a href="/book-trainer/Khabib" class="btn-trainer w-100" style="border-color: #fff; color: #fff;">SCHEDULE SESSION <i
+              class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trainer 3 -->
+    <div class="col-md-4 reveal" style="transition-delay: 0.3s;">
+      <div class="trainer-card">
+        <div class="trainer-img-wrapper">
+          <img src="/images/uploaded/sarah.png" class="trainer-img" alt="Sarah">
+          <div class="trainer-overlay"></div>
+          <div class="trainer-badge" style="background: #ff0055; color: #fff;">STRIKING</div>
+        </div>
+        <div class="trainer-info">
+          <h3 class="trainer-name">SARAH</h3>
+          <p class="trainer-desc">Optimized kinetic transfer protocols for eight-point striking.</p>
+          <a href="/book-trainer/Sarah" class="btn-trainer w-100" style="border-color: #ff0055; color: #ff0055;">SCHEDULE SESSION <i
+              class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Modern GenZ Trainer Card */
+  .trainer-card {
+    background: #0a0a0a;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .trainer-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(204, 255, 0, 0.1);
+  }
+
+  .trainer-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+  }
+
+  .trainer-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .trainer-card:hover .trainer-img {
+    filter: grayscale(0%) contrast(1.1);
+    transform: scale(1.1);
+  }
+
+  .trainer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #0a0a0a 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  .trainer-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    z-index: 2;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .trainer-card:hover .trainer-badge {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .trainer-info {
+    padding: 0 30px 30px 30px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background: #0a0a0a;
+  }
+
+  .trainer-name {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-top: -20px;
+    /* Pull it slightly over the image gradient */
+    margin-bottom: 15px;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 1);
+  }
+
+  .trainer-desc {
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 30px;
+    flex-grow: 1;
+  }
+
+  .btn-trainer {
+    display: inline-block;
+    text-align: center;
+    padding: 15px;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  .btn-trainer:hover {
+    background: var(--accent-cyan) !important;
+    border-color: var(--accent-cyan) !important;
+    color: #000 !important;
+    box-shadow: 0 10px 20px rgba(204, 255, 0, 0.3);
+  }
+
+  /* Specific hover overrides for the different colored buttons to all turn neon green on hover for brand consistency */
+  .trainer-card:hover .btn-trainer {
+    background: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: #000 !important;
+  }
+</style>

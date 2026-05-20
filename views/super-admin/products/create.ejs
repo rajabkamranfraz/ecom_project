@@ -1,38 +1,157 @@
-<div class="container mt-4">
-    <h2>Create New Product</h2>
-  
-    <form action="/super-admin/products/create" method="POST" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="name" class="form-label">Product Name</label>
-        <input type="text" name="name" class="form-control" required>
-      </div>
-  
-      <div class="mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input type="text" name="price" class="form-control" required>
-      </div>
-  
-      <div class="mb-3">
-        <label for="color" class="form-label">Color</label>
-        <input type="text" name="color" class="form-control">
-      </div>
-  
-      <div class="mb-3">
-        <label for="department" class="form-label">Department</label>
-        <input type="text" name="department" class="form-control">
-      </div>
-  
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea name="description" class="form-control" rows="3"></textarea>
-      </div>
-  
-      <div class="mb-3">
-        <label for="image" class="form-label">Product Image</label>
-        <input type="file" name="image" class="form-control" accept="image/*">
-      </div>
-  
-      <button type="submit" class="btn btn-success">Create Product</button>
-    </form>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head') %>
+
+    <!-- ADMIN FORM FIX STYLES -->
+    <style>
+        .admin-section .welcome-content {
+            display: block;
+        }
+
+        .admin-section .welcome-content::before {
+            display: none;
+        }
+
+        .admin-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #252d38;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .admin-form .form-group {
+            margin-bottom: 18px;
+        }
+
+        .admin-form label {
+            display: block;
+            margin-bottom: 6px;
+            color: #DDD0B2;
+            font-weight: 600;
+        }
+
+        .admin-form input,
+        .admin-form textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #2f3844;
+            border: 1px solid #404b57;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .admin-form input:focus,
+        .admin-form textarea:focus {
+            outline: 2px solid #ac3a3f;
+            background-color: #1a1d20;
+        }
+
+        .admin-form .admin-btn {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background-color: #ac3a3f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .admin-form .admin-btn:hover {
+            background-color: #c94a4f;
+        }
+
+        .admin-form select {
+            width: 100%;
+            padding: 10px;
+            background-color: #2f3844;
+            border: 1px solid #404b57;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .admin-form select:focus {
+            outline: 2px solid #ac3a3f;
+            background-color: #1a1d20;
+        }
+    </style>
+</head>
+
+<body>
+
+<%- include('../../partials/header') %>
+
+    <!-- MAIN -->
+    <main>
+        <section class="welcome admin-section">
+            <div class="container">
+
+                <div class="welcome-header">
+                    <h2>Create New Product</h2>
+                </div>
+
+                <div class="welcome-content">
+
+                    <form class="admin-form"
+                          action="/super-admin/products/create"
+                          method="POST"
+                          enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="text" name="price" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Color</label>
+                            <input type="text" name="color">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books</option>
+                                <option value="sports">Sports</option>
+                                <option value="home">Home & Garden</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Product Image</label>
+                            <input type="file" name="image" accept="image/*">
+                        </div>
+
+                        <button type="submit" class="admin-btn">
+                            Create Product
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+<%- include('../../partials/footer') %>
+
+</body>
+
+</html>
   

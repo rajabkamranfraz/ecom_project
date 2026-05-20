@@ -1,0 +1,469 @@
+<style>
+  /* GenZ / Minimal Brutalist AI Companion */
+  .chatbot-container {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1050;
+  }
+
+  /* The trigger orb */
+  .chatbot-btn {
+    width: 70px;
+    height: 70px;
+    background: #000;
+    color: var(--accent-cyan);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--accent-cyan), 0 0 20px rgba(204, 255, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    z-index: 1060;
+  }
+  .chatbot-btn::after {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    border-radius: 50%;
+    border: 2px dashed var(--accent-cyan);
+    animation: spinRotate 10s linear infinite;
+  }
+
+  .chatbot-btn:hover {
+    transform: scale(1.1);
+    background: var(--accent-cyan);
+    color: #000;
+    box-shadow: 0 0 0 2px #000, 0 0 30px rgba(204, 255, 0, 0.8);
+  }
+
+  @keyframes spinRotate { 100% { transform: rotate(360deg); } }
+
+  /* The actual interface */
+  .chatbot-window {
+    position: fixed;
+    bottom: 130px;
+    right: 40px;
+    width: 420px;
+    height: 600px;
+    max-height: 80vh;
+    background: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    display: none;
+    flex-direction: column;
+    z-index: 1050;
+    overflow: hidden;
+    transform-origin: bottom right;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  .chatbot-window.active {
+    display: flex;
+    animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideUpFade {
+    0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Minimal Header */
+  .chatbot-header {
+    padding: 30px 30px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .chatbot-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .chatbot-header h3::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-cyan);
+    animation: pulseOrb 2s infinite;
+  }
+
+  @keyframes pulseOrb {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* Typography-led message flow */
+  .chatbot-messages {
+    padding: 20px 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .chatbot-messages::-webkit-scrollbar { width: 0px; } /* Hide scrollbar for ultra-clean look */
+
+  .msg-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* User messages are muted, right-aligned, small */
+  .msg-user {
+    align-items: flex-end;
+  }
+  .msg-user .text {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    text-align: right;
+    max-width: 80%;
+  }
+
+  /* Bot messages are bold, neon, massive */
+  .msg-bot {
+    align-items: flex-start;
+  }
+  .msg-bot .text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    line-height: 1.3;
+    max-width: 90%;
+    text-shadow: 0 0 20px rgba(204,255,0,0.2);
+  }
+
+  /* Massive bold input area */
+  .chatbot-input-area {
+    padding: 20px 30px 30px;
+    background: transparent;
+  }
+
+  .input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+    transition: all 0.3s;
+  }
+  .input-wrapper:focus-within {
+    background: rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 0 1px var(--accent-cyan), 0 10px 30px rgba(204,255,0,0.1);
+  }
+
+  .chatbot-input-area input {
+    flex-grow: 1;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px 10px 20px 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    outline: none;
+  }
+  
+  .chatbot-input-area input::placeholder {
+    color: rgba(255,255,255,0.2);
+    font-weight: 800;
+  }
+
+  .chatbot-input-area button {
+    background: transparent;
+    border: none;
+    color: var(--accent-cyan);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0 25px 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chatbot-input-area button:hover {
+    transform: scale(1.1);
+  }
+
+  /* Product Cards injected into chat */
+  .ai-product-card {
+    background: #000;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 0 0 1px var(--accent-cyan);
+  }
+  .ai-product-card h4 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+  .ai-product-card p {
+    color: var(--accent-cyan);
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  .ai-product-card .actions {
+    display: flex;
+    gap: 10px;
+  }
+  .ai-product-card .actions a {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+  }
+  .btn-view { background: rgba(255,255,255,0.1); color: #fff; }
+  .btn-view:hover { background: rgba(255,255,255,0.2); color: #fff; }
+  .btn-add { background: var(--accent-cyan); color: #000; }
+  .btn-add:hover { background: #fff; color: #000; }
+
+  /* Smooth elegant typing indicator */
+  .typing-indicator {
+    display: flex;
+    gap: 5px;
+    padding: 10px 0;
+  }
+  .typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    animation: waveFade 1.2s infinite ease-in-out;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes waveFade {
+    0%, 100% { opacity: 0.2; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-5px); box-shadow: 0 0 10px var(--accent-cyan); }
+  }
+
+  /* Autocomplete Dropdown */
+  .chatbot-autocomplete {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 0;
+    right: 0;
+    background: #0a0a0a !important;
+    border: 1px solid var(--accent-cyan) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9) !important;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999 !important;
+  }
+  .chatbot-autocomplete::-webkit-scrollbar { width: 0px; }
+  .chatbot-ac-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .chatbot-ac-item:last-child { border-bottom: none; }
+  .chatbot-ac-item:hover {
+    background: rgba(204,255,0,0.1);
+    color: var(--accent-cyan);
+    padding-left: 25px;
+  }
+
+</style>
+
+<div class="chatbot-container">
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      <h3>FIGHTFIT AI</h3>
+      <i class="fas fa-compress-alt" style="cursor:pointer; color: rgba(255,255,255,0.3); font-size: 1.2rem; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.3)'" onclick="toggleChatbot()"></i>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div class="msg-block msg-bot">
+        <div class="text">Hello! I am FightFit AI. How can I assist you with your performance gear today?</div>
+      </div>
+    </div>
+    
+    <form class="chatbot-input-area" id="chatbotForm" autocomplete="off">
+      <div class="input-wrapper">
+        <div class="chatbot-autocomplete" id="chatbotAutocomplete"></div>
+        <input type="text" id="chatInput" placeholder="Enter query..." required />
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="chatbot-btn" onclick="toggleChatbot()">
+    <i class="fas fa-crosshairs"></i>
+  </div>
+</div>
+
+<script>
+  const chatInput = document.getElementById('chatInput');
+
+  function toggleChatbot() {
+    const win = document.getElementById('chatbotWindow');
+    win.classList.toggle('active');
+    if(win.classList.contains('active')) {
+      setTimeout(() => chatInput.focus(), 500);
+    }
+  }
+
+  function appendMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg-block ' + (isUser ? 'msg-user' : 'msg-bot');
+    msgDiv.innerHTML = `<div class="text">${text}</div>`;
+    document.getElementById('chatbotMessages').appendChild(msgDiv);
+    scrollToBottom();
+  }
+  
+  function appendProduct(product) {
+    const pdiv = document.createElement('div');
+    pdiv.className = 'msg-block msg-bot';
+    pdiv.innerHTML = `
+      <div class="ai-product-card">
+        <img src="${product.image || 'https://dummyimage.com/100x100/111/ccff00.png&text=' + encodeURIComponent(product.name)}" style="width: 100%; height: 120px; object-fit: contain; background: #fff; border-radius: 8px; margin-bottom: 10px;">
+        <h4>${product.name}</h4>
+        <p>$${product.price}</p>
+        <div class="actions">
+          <a href="/product/${product.slug || product._id}" class="btn-view">Details</a>
+          <a href="/add-cart/${product._id}" class="btn-add">Acquire</a>
+        </div>
+      </div>
+    `;
+    document.getElementById('chatbotMessages').appendChild(pdiv);
+    scrollToBottom();
+  }
+
+  function appendOrder(order) {
+    const odiv = document.createElement('div');
+    odiv.className = 'msg-block msg-bot';
+    odiv.innerHTML = `
+      <div class="ai-product-card" style="border-color: #fff;">
+        <h4 style="color: #ccc;">ORDER HASH</h4>
+        <p style="color: #fff; font-size: 1.2rem; font-family: monospace;">#${order._id.substring(0,8)}</p>
+        <div class="actions">
+          <button onclick="document.getElementById('chatInput').value='track order ${order._id}'; document.getElementById('chatbotForm').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}))" class="btn-add" style="width:100%; border:none; cursor:pointer;">Track Status</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('chatbotMessages').appendChild(odiv);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    const msgs = document.getElementById('chatbotMessages');
+    msgs.scrollTo({ top: msgs.scrollHeight, behavior: 'smooth' });
+  }
+
+  document.getElementById('chatbotForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+
+    document.getElementById('chatbotAutocomplete').style.display = 'none';
+
+    appendMessage(msg, true);
+    chatInput.value = '';
+
+    // Typing...
+    const typingId = 'typing-' + Date.now();
+    const typingDiv = document.createElement('div');
+    typingDiv.id = typingId;
+    typingDiv.className = 'msg-block msg-bot';
+    typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    document.getElementById('chatbotMessages').appendChild(typingDiv);
+    scrollToBottom();
+
+    fetch('/api/chatbot/message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById(typingId).remove();
+      
+      if(data.text) {
+        appendMessage(data.text, false);
+      }
+      if(data.products && data.products.length > 0) {
+        data.products.forEach(p => appendProduct(p));
+      }
+      if(data.orders && data.orders.length > 0) {
+        data.orders.forEach(o => appendOrder(o));
+      }
+    })
+    .catch(err => {
+      document.getElementById(typingId).remove();
+      appendMessage('Connection severed. Re-establish link.', false);
+    });
+  });
+
+  // Autocomplete Logic
+  let debounceTimer;
+  chatInput.addEventListener('input', function(e) {
+    clearTimeout(debounceTimer);
+    const q = e.target.value.trim();
+    const ac = document.getElementById('chatbotAutocomplete');
+    
+    if(q.length < 2) {
+      ac.style.display = 'none';
+      return;
+    }
+    
+    debounceTimer = setTimeout(() => {
+      fetch('/api/chatbot/autocomplete?q=' + encodeURIComponent(q))
+      .then(res => res.json())
+      .then(data => {
+        if(data && data.length > 0) {
+          ac.innerHTML = '';
+          data.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'chatbot-ac-item';
+            div.innerHTML = `<i class="fas fa-search" style="margin-right: 8px; color: var(--accent-cyan);"></i> ${item.name}`;
+            div.onclick = () => {
+              chatInput.value = 'show ' + item.name;
+              ac.style.display = 'none';
+              document.getElementById('chatbotForm').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}));
+            };
+            ac.appendChild(div);
+          });
+          ac.style.display = 'block';
+        } else {
+          ac.style.display = 'none';
+        }
+      });
+    }, 300);
+  });
+</script>
