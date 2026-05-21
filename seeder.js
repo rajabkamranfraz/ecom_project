@@ -55,6 +55,22 @@ const productsToSeed = [
     stock: 45,
     department: "EQUIPMENT",
     image: "https://images.unsplash.com/photo-1517438322307-e67111335449?w=500&q=80"
+  },
+  {
+    name: "Gold Champion Boxing Gloves",
+    description: "Exclusive premium 24k gold accented boxing gloves for champions. Hand-stitched.",
+    price: 350.00,
+    stock: 5,
+    department: "Premium",
+    image: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=500&q=80"
+  },
+  {
+    name: "Dragon Silk Competition Gi",
+    description: "Ultra-lightweight, durable competition Gi made with high-end dragon silk blend.",
+    price: 250.00,
+    stock: 10,
+    department: "Premium",
+    image: "https://images.unsplash.com/photo-1560021674-faeb89c67087?w=500&q=80"
   }
 ];
 
