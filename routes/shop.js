@@ -297,7 +297,7 @@ router.get("/shop/:page?", async function (req, res) {
 
   let { category, minPrice, maxPrice } = req.query;
 
-  let allProducts = await Product.find({}).lean();
+  let allProducts = await Product.find({ department: { $nin: ["Services", "Memberships"] } }).lean();
 
   if (category && category !== '') {
     allProducts = allProducts.filter(product => {
