@@ -183,6 +183,13 @@ async function seed() {
     }
     console.log("Products seeded.");
 
+    // Fix existing Membership product images in case they were already created
+    await Product.updateMany(
+      { department: "Memberships" },
+      { $set: { image: "/images/uploaded/membership_badge.png" } }
+    );
+    console.log("Membership product images updated.");
+
     console.log("Seeding process completed!");
     process.exit();
   } catch (err) {

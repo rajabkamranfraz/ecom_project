@@ -222,7 +222,7 @@ router.post("/subscribe/:tier", async (req, res) => {
   let prodName = `Membership - ${tierName}`;
   let prod = await Product.findOne({ name: prodName });
   if (!prod) {
-    prod = await Product.create({ name: prodName, price: price, stock: 9999, department: "Memberships", image: '/images/uploaded/Gemini_Generated_Image_vz6oguvz6oguvz6o.png' });
+    prod = await Product.create({ name: prodName, price: price, stock: 9999, department: "Memberships", image: '/images/uploaded/membership_badge.png' });
   }
   res.redirect(`/add-cart/${prod._id}`);
 });
